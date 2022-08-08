@@ -12,6 +12,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Infinity Calculator App</Text>
+      <Text>Player 1: BS 12, Burst 3</Text>
+      <Text>Player 2: BS 13, Burst 1</Text>
       <Calculator player1={fakeProfile1} player2={fakeProfile2}/>
       <StatusBar style="auto" />
     </View>
