@@ -8,12 +8,12 @@ const Calculator = ({player1, player2}) => {
     let p1Successes = p1Rolls.filter((r)=>{return r <= player1.bs})
     let p2Successes = p2Rolls.filter((roll)=>{return roll <= player2.bs})
 
-    if(p1Successes.length < 1){
-      return p2Successes.length > 0 ? p2Successes : "whiff"
-    } else if (p2Successes.length < 1) {
-      return p1Successes.length > 0 ? p1Successes : "whiff"
-    } 
+    // Skip process if both players whiff
+    if(p1Successes.length < 1 && p2Successes <1){
+      return "whiff"
+    }
 
+    // Find player 1's unblocked
     let p1Unblocked = []
     for (i=0; i<p1Successes.length; i++){
       let unblocked = true
@@ -27,6 +27,7 @@ const Calculator = ({player1, player2}) => {
       }
     }
 
+    // Find player 2's unblocked
     let p2Unblocked = []
     for (i=0; i<p2Successes.length; i++){
       let unblocked = true
@@ -40,20 +41,11 @@ const Calculator = ({player1, player2}) => {
       }
     }
 
-    // let p2Unblocked = []
-    // for (i=0; i<p2Successes.length; i++){
-    //   for (j=0; j<p1Successes.length; j++){
-    //     if(p2Successes[i] > p1Successes[j]){
-    //       p2Unblocked.push(p2Successes[i])
-    //     }
-    //   }
-    // }
-
-
     return {p1Successes, p2Successes, p1Unblocked:p1Unblocked, p2Unblocked:p2Unblocked}
   }
 
   const calcFunction = (player1, player2) => {
+    // Roll the dice
     let max = Math.floor(21)
     let min = Math.ceil(1)
 
@@ -68,7 +60,11 @@ const Calculator = ({player1, player2}) => {
     }
 
 
+    // Compare the dice
     let rollResults = compareRolls(player1, player2, profile1Rolls, profile2Rolls)
+
+
+    // Set state for all the things
     setResults({profile1Rolls, profile2Rolls, rollResults})
   }
 
