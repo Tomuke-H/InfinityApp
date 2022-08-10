@@ -2,7 +2,9 @@ import React, {useState } from 'react';
 import { StyleSheet, Text, Button, View } from 'react-native';
 
 const Calculator = ({player1, player2}) => {
-  const [results, setResults] = useState({rollResults:[]})
+  const [results, setResults] = useState([])
+  const [counter, setCounter] = useState(0)
+  const [loading, setLoading] = useState(false)
 
 
   // The Big Comparison
@@ -119,38 +121,54 @@ const Calculator = ({player1, player2}) => {
 
 
 
+  const averagesCalculation = (player1, player2) => {
+    let hugeArray = calcFunction(player1, player2)
+    setResults(hugeArray)
+  }
+
+
+
   // Master function
   const calcFunction = (player1, player2) => {
-
-    // Roll the dice
+    let allResults = []
     let max = Math.floor(21)
     let min = Math.ceil(1)
+    
+    
+    for(let i=0; i<1; i++){
+      let profile1Rolls = []
+      let profile2Rolls = []
 
-    let profile1Rolls = []
-    for(let i = 0; i < player1.weapon.burst; i++){
-      profile1Rolls.push(Math.floor(Math.random() * (max - min) + min));
+      // Roll the dice
+      
+      for(let j = 0; j < player1.weapon.burst; j++){
+        profile1Rolls.push(Math.floor(Math.random() * (max - min) + min));
+      }
+      
+      for(let k = 0; k < player2.weapon.burst; k++){
+        profile2Rolls.push(Math.floor(Math.random() * (max - min) + min));
+      }
+      
+      
+      // Compare the dice
+      let rollResults = compareRolls(player1, player2, profile1Rolls, profile2Rolls)
+      
+      // Calculate damage if applicable
+      let damageResults
+      if(rollResults.p1Unblocked && rollResults.p1Unblocked.length > 0 || rollResults.p2Unblocked && rollResults.p2Unblocked.length > 0){
+        damageResults = damageFunction(player1, player2, rollResults)
+        // damageResults = 'Could be damage!'
+      } else {
+        damageResults = {savingRolls:[], unsavedHits:[], unsavedDamage:0}
+      }
+      
+      // Set state for all the things
+      // setResults({profile1Rolls, profile2Rolls, rollResults, damageResults})
+      setCounter(i + 1)
+      allResults.push({profile1Rolls, profile2Rolls, rollResults, damageResults})
     }
 
-    let profile2Rolls = []
-    for(let i = 0; i < player2.weapon.burst; i++){
-      profile2Rolls.push(Math.floor(Math.random() * (max - min) + min));
-    }
-
-
-    // Compare the dice
-    let rollResults = compareRolls(player1, player2, profile1Rolls, profile2Rolls)
-
-    // Calculate damage if applicable
-    let damageResults
-    if(rollResults.p1Unblocked && rollResults.p1Unblocked.length > 0 || rollResults.p2Unblocked && rollResults.p2Unblocked.length > 0){
-      damageResults = damageFunction(player1, player2, rollResults)
-      // damageResults = 'Could be damage!'
-    } else {
-      damageResults = {savingRolls:[], unsavedHits:[], unsavedDamage:0}
-    }
-
-    // Set state for all the things
-    setResults({profile1Rolls, profile2Rolls, rollResults, damageResults})
+    return allResults
   }
 
   
@@ -158,8 +176,8 @@ const Calculator = ({player1, player2}) => {
   // Display
   return (
     <View style={styles.container}>
-      <Button onPress={()=> calcFunction(player1, player2)} title="Run"/>
-      <Text>{player1.name}'s Roll:{JSON.stringify(results.profile1Rolls)}</Text>
+      <Button onPress={()=> averagesCalculation(player1, player2)} title="Run"/>
+      {/* <Text>{player1.name}'s Roll:{JSON.stringify(results.profile1Rolls)}</Text>
       <Text>{player2.name}'s Roll:{JSON.stringify(results.profile2Rolls)}</Text>
       <Text></Text>
       <Text>{player1.name}'s Successes:{results.rollResults.p1Unblocked ? JSON.stringify(results.rollResults.p1Unblocked) : "[]"}</Text>
@@ -167,10 +185,16 @@ const Calculator = ({player1, player2}) => {
       <Text></Text>
       <Text>Saving Roll: {results.damageResults ? JSON.stringify(results.damageResults.savingRolls) : "[]"}</Text>
       <Text>Failed Saves: {results.damageResults ? JSON.stringify(results.damageResults.unsavedHits) : "[]"}</Text>
-      <Text>{JSON.stringify(results.damageResults)}</Text>
+      <Text>{JSON.stringify(results.damageResults)}</Text> */}
       <Text> ------------------- </Text>
       <Text></Text>
-      <Text>Raw Data: {JSON.stringify(results)}</Text>
+      {loading ? <Text>Loading</Text> :
+      <View>
+        <Text>ran {counter} times</Text>
+        <Text>Array Length: {JSON.stringify(results.length)}</Text>
+        <Text>Raw Data: {JSON.stringify(results)}</Text>
+      </View>
+      }
     </View>
   )
 }
