@@ -4,47 +4,91 @@ import { Text, Button, View } from 'react-native';
 const Calculator = ({player1, player2}) => {
   const [results, setResults] = useState({rollResults:[]})
 
+
+  // The Big Comparison
   const compareRolls = (player1, player2, p1Rolls, p2Rolls) => {
     let p1Successes = p1Rolls.filter((r)=>{return r <= player1.bs})
-    let p2Successes = p2Rolls.filter((roll)=>{return roll <= player2.bs})
+    let p2Successes = p2Rolls.filter((r)=>{return r <= player2.bs})
+
+    // let p1Successes = [12, 2]
+    // let p2Successes = [5]
+    let p1Unblocked = []
+    let p2Unblocked = []
+
 
     // Skip process if both players whiff
-    if(p1Successes.length < 1 && p2Successes <1){
-      return "whiff"
+    if(p1Successes.length < 1 && p2Successes < 1){
+      return {p1Successes, p2Successes}
     }
 
-    // Find player 1's unblocked
-    let p1Unblocked = []
-    for (i=0; i<p1Successes.length; i++){
+
+    // Seperate Crits
+    let p1Crits = p1Successes.filter((r)=>{return r === player1.bs})
+    let p2Crits = p2Successes.filter((r)=>{return r === player2.bs})
+    let p1Hits = p1Successes.filter((r)=>{return r !== player1.bs})
+    let p2Hits = p2Successes.filter((r)=>{return r !== player2.bs})
+
+
+    // Crit cancel
+    if(p1Crits.length > 0 && p2Crits.length > 0){
+      return {p1Successes, p2Successes, p1Crits, p2Crits, p1Unblocked:[], p2Unblocked:[]}
+    }
+   
+
+    // Find player 1's unblocked hits
+    for (i=0; i<p1Hits.length; i++){
       let unblocked = true
-      for (j=0; j<p2Successes.length; j++){
-        if(p1Successes[i] <= p2Successes[j]){
+
+      if(p2Crits.length > 0){
+        unblocked = false
+      }
+
+      for (j=0; j<p2Hits.length; j++){
+        if(p1Hits[i] <= p2Hits[j]){
           unblocked = false
         }
       }
       if(unblocked === true){
-        p1Unblocked.push(p1Successes[i])
+        p1Unblocked.push(p1Hits[i])
       }
     }
 
-    // Find player 2's unblocked
-    let p2Unblocked = []
-    for (i=0; i<p2Successes.length; i++){
+
+    // Find player 2's unblocked hits
+    for (i=0; i<p2Hits.length; i++){
       let unblocked = true
-      for (j=0; j<p1Successes.length; j++){
-        if(p2Successes[i] <= p1Successes[j]){
+
+      if(p1Crits.length > 0){
+        unblocked = false
+      }
+
+      for (j=0; j<p1Hits.length; j++){
+        if(p2Hits[i] <= p1Hits[j]){
           unblocked = false
         }
       }
       if(unblocked === true){
-        p2Unblocked.push(p2Successes[i])
+        p2Unblocked.push(p2Hits[i])
       }
     }
 
-    return {p1Successes, p2Successes, p1Unblocked:p1Unblocked, p2Unblocked:p2Unblocked}
+    // Push crits to unblocked
+    for(i = 0; i < p1Crits.length; i++){
+      p1Unblocked.push(p1Crits[i])
+    }
+    for(i = 0; i < p2Crits.length; i++){
+      p2Unblocked.push(p2Crits[i])
+    }
+
+
+    return {p1Successes, p2Successes, p1Crits, p2Crits, p1Unblocked, p2Unblocked}
   }
 
+
+
+  // Master function
   const calcFunction = (player1, player2) => {
+
     // Roll the dice
     let max = Math.floor(21)
     let min = Math.ceil(1)
@@ -68,7 +112,9 @@ const Calculator = ({player1, player2}) => {
     setResults({profile1Rolls, profile2Rolls, rollResults})
   }
 
-  // calcFunction(player1, player2)
+  
+
+  // Display
   return (
     <View>
       <Button onPress={()=> calcFunction(player1, player2)} title="Run"/>
