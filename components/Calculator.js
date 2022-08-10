@@ -99,13 +99,13 @@ const Calculator = ({player1, player2}) => {
     let unsavedHits = []
 
     if(rollResults.p1Unblocked.length > 0){
-      for(let i = 0; i < rollResults.p1Unblocked.length; i++){
+      for(let i = 0; i < rollResults.p1Unblocked.length + rollResults.p1Crits.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player1.weapon.dam - player2.arm})
       unsavedDamage = {player: "Player2", damage: unsavedHits.length}
     } else if(rollResults.p2Unblocked.length > 0) {
-      for(let i = 0; i < rollResults.p2Unblocked.length; i++){
+      for(let i = 0; i < rollResults.p2Unblocked.length + rollResults.p2Crits.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player2.weapon.dam - player1.arm})
