@@ -16,24 +16,41 @@ const Calculator = ({player1, player2}) => {
 
     let p1Unblocked = []
     for (i=0; i<p1Successes.length; i++){
+      let unblocked = true
       for (j=0; j<p2Successes.length; j++){
-        if(p1Successes[i] > p2Successes[j]){
-          p1Unblocked.push(p1Successes[i])
+        if(p1Successes[i] <= p2Successes[j]){
+          unblocked = false
         }
+      }
+      if(unblocked === true){
+        p1Unblocked.push(p1Successes[i])
       }
     }
 
     let p2Unblocked = []
     for (i=0; i<p2Successes.length; i++){
+      let unblocked = true
       for (j=0; j<p1Successes.length; j++){
-        if(p2Successes[i] > p1Successes[j]){
-          p2Unblocked.push(p2Successes[i])
+        if(p2Successes[i] <= p1Successes[j]){
+          unblocked = false
         }
+      }
+      if(unblocked === true){
+        p2Unblocked.push(p2Successes[i])
       }
     }
 
+    // let p2Unblocked = []
+    // for (i=0; i<p2Successes.length; i++){
+    //   for (j=0; j<p1Successes.length; j++){
+    //     if(p2Successes[i] > p1Successes[j]){
+    //       p2Unblocked.push(p2Successes[i])
+    //     }
+    //   }
+    // }
 
-    return {p1Unblocked:p1Unblocked, p2Unblocked:p2Unblocked}
+
+    return {p1Successes, p2Successes, p1Unblocked:p1Unblocked, p2Unblocked:p2Unblocked}
   }
 
   const calcFunction = (player1, player2) => {
