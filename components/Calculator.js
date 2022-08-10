@@ -103,13 +103,13 @@ const Calculator = ({player1, player2}) => {
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player1.weapon.dam - player2.arm})
-      unsavedDamage = {player: "Player2", damage: unsavedHits.length}
+      unsavedDamage = {player: player2.name, damage: unsavedHits.length}
     } else if(rollResults.p2Unblocked.length > 0) {
       for(let i = 0; i < rollResults.p2Unblocked.length + rollResults.p2Crits.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player2.weapon.dam - player1.arm})
-      unsavedDamage = {player: "Player1", damage: unsavedHits.length}
+      unsavedDamage = {player: player1.name, damage: unsavedHits.length}
     } else {
       return "error"
     }
@@ -159,11 +159,11 @@ const Calculator = ({player1, player2}) => {
   return (
     <View style={styles.container}>
       <Button onPress={()=> calcFunction(player1, player2)} title="Run"/>
-      <Text>Player 1's Roll:{JSON.stringify(results.profile1Rolls)}</Text>
-      <Text>Player 2's Roll:{JSON.stringify(results.profile2Rolls)}</Text>
+      <Text>{player1.name}'s Roll:{JSON.stringify(results.profile1Rolls)}</Text>
+      <Text>{player2.name}'s Roll:{JSON.stringify(results.profile2Rolls)}</Text>
       <Text></Text>
-      <Text>Player 1's Successes:{results.rollResults.p1Unblocked ? JSON.stringify(results.rollResults.p1Unblocked) : "[]"}</Text>
-      <Text>Player 2's Successes:{results.rollResults.p2Unblocked ? JSON.stringify(results.rollResults.p2Unblocked) : "[]"}</Text>
+      <Text>{player1.name}'s Successes:{results.rollResults.p1Unblocked ? JSON.stringify(results.rollResults.p1Unblocked) : "[]"}</Text>
+      <Text>{player2.name}'s Successes:{results.rollResults.p2Unblocked ? JSON.stringify(results.rollResults.p2Unblocked) : "[]"}</Text>
       <Text></Text>
       <Text>Saving Roll: {results.damageResults ? JSON.stringify(results.damageResults.savingRolls) : "[]"}</Text>
       <Text>Failed Saves: {results.damageResults ? JSON.stringify(results.damageResults.unsavedHits) : "[]"}</Text>
