@@ -102,13 +102,13 @@ const Calculator = ({player1, player2}) => {
       for(let i = 0; i < rollResults.p1Unblocked.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
-      unsavedHits = savingRolls.filter((r)=> {return r <= player1.dam - player2.arm})
+      unsavedHits = savingRolls.filter((r)=> {return r <= player1.weapon.dam - player2.arm})
       unsavedDamage = {player: "Player2", damage: unsavedHits.length}
     } else if(rollResults.p2Unblocked.length > 0) {
       for(let i = 0; i < rollResults.p2Unblocked.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
-      unsavedHits = savingRolls.filter((r)=> {return r <= player2.dam - player1.arm})
+      unsavedHits = savingRolls.filter((r)=> {return r <= player2.weapon.dam - player1.arm})
       unsavedDamage = {player: "Player1", damage: unsavedHits.length}
     } else {
       return "error"
@@ -127,12 +127,12 @@ const Calculator = ({player1, player2}) => {
     let min = Math.ceil(1)
 
     let profile1Rolls = []
-    for(let i = 0; i < player1.burst; i++){
+    for(let i = 0; i < player1.weapon.burst; i++){
       profile1Rolls.push(Math.floor(Math.random() * (max - min) + min));
     }
 
     let profile2Rolls = []
-    for(let i = 0; i < player2.burst; i++){
+    for(let i = 0; i < player2.weapon.burst; i++){
       profile2Rolls.push(Math.floor(Math.random() * (max - min) + min));
     }
 
