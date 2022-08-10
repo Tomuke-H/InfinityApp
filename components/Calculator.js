@@ -88,14 +88,14 @@ const Calculator = ({player1, player2}) => {
   // Damage calculating function
   const damageFunction = (player1, player2, rollResults) => {
     if(!rollResults.p1Unlocked && !rollResults.p2Unblocked){
-      return 'no damage'
+      return 'backup error'
     }
 
     // Roll saves
     let max = Math.floor(21)
     let min = Math.ceil(1)
     let savingRolls = []
-    let unsavedDamage = 0
+    let unsavedDamage = {player: 'none', damage: 0}
     let unsavedHits = []
 
     if(rollResults.p1Unblocked.length > 0){
@@ -103,13 +103,13 @@ const Calculator = ({player1, player2}) => {
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player1.dam - player2.arm})
-      unsavedDamage = unsavedHits.length
+      unsavedDamage = {player: "Player2", damage: unsavedHits.length}
     } else if(rollResults.p2Unblocked.length > 0) {
       for(let i = 0; i < rollResults.p2Unblocked.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player2.dam - player1.arm})
-      unsavedDamage = unsavedHits.length
+      unsavedDamage = {player: "Player1", damage: unsavedHits.length}
     } else {
       return "error"
     }
@@ -146,7 +146,7 @@ const Calculator = ({player1, player2}) => {
       damageResults = damageFunction(player1, player2, rollResults)
       // damageResults = 'Could be damage!'
     } else {
-      damageResults = 'No damage potential'
+      damageResults = {savingRolls:[], unsavedHits:[], unsavedDamage:0}
     }
 
     // Set state for all the things
@@ -165,9 +165,9 @@ const Calculator = ({player1, player2}) => {
       <Text>Player 1's Successes:{results.rollResults.p1Unblocked ? JSON.stringify(results.rollResults.p1Unblocked) : "[]"}</Text>
       <Text>Player 2's Successes:{results.rollResults.p2Unblocked ? JSON.stringify(results.rollResults.p2Unblocked) : "[]"}</Text>
       <Text></Text>
-      <Text>Saving Roll: {JSON.stringify(results.damageResults.savingRolls)}</Text>
-      <Text>Failed Saves: {JSON.stringify(results.damageResults.unsavedHits)}</Text>
-      <Text>Unsaved Damage: {JSON.stringify(results.damageResults.unsavedDamage)}</Text>
+      <Text>Saving Roll: {results.damageResults ? JSON.stringify(results.damageResults.savingRolls) : "[]"}</Text>
+      <Text>Failed Saves: {results.damageResults ? JSON.stringify(results.damageResults.unsavedHits) : "[]"}</Text>
+      <Text>{JSON.stringify(results.damageResults)}</Text>
       <Text> ------------------- </Text>
       <Text></Text>
       <Text>Raw Data: {JSON.stringify(results)}</Text>
