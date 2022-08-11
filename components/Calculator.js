@@ -2,7 +2,7 @@ import React, {useState } from 'react';
 import { StyleSheet, Text, Button, View } from 'react-native';
 
 const Calculator = ({player1, player2}) => {
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState({aASuccess:0, rASuccess:0, aCADamage:0, aADamage:0, aCRDamage:0, aRDamage:0})
   const [counter, setCounter] = useState(0)
   const [loading, setLoading] = useState(false)
 
@@ -12,21 +12,21 @@ const Calculator = ({player1, player2}) => {
     let p1Successes = p1Rolls.filter((r)=>{return r <= player1.bs})
     let p2Successes = p2Rolls.filter((r)=>{return r <= player2.bs})
 
-    // let p1Successes = [12, 2]
-    // let p2Successes = [5]
+    let p1Crits = []
+    let p2Crits = []
     let p1Unblocked = []
     let p2Unblocked = []
 
 
     // Skip process if both players whiff
     if(p1Successes.length < 1 && p2Successes < 1){
-      return {p1Successes, p2Successes}
+      return {p1Crits, p2Crits, p1Unblocked, p2Unblocked, p1Successes, p2Successes}
     }
 
 
     // Seperate Crits
-    let p1Crits = p1Successes.filter((r)=>{return r === player1.bs})
-    let p2Crits = p2Successes.filter((r)=>{return r === player2.bs})
+    p1Crits = p1Successes.filter((r)=>{return r === player1.bs})
+    p2Crits = p2Successes.filter((r)=>{return r === player2.bs})
     let p1Hits = p1Successes.filter((r)=>{return r !== player1.bs})
     let p2Hits = p2Successes.filter((r)=>{return r !== player2.bs})
 
@@ -83,7 +83,7 @@ const Calculator = ({player1, player2}) => {
     }
 
 
-    return {p1Successes, p2Successes, p1Crits, p2Crits, p1Unblocked, p2Unblocked}
+    return {p1Crits, p2Crits, p1Unblocked, p2Unblocked, p1Successes, p2Successes}
   }
 
 
@@ -105,13 +105,13 @@ const Calculator = ({player1, player2}) => {
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player1.weapon.dam - player2.arm})
-      unsavedDamage = {player: player2.name, damage: unsavedHits.length}
+      unsavedDamage = {player: "reactive", damage: unsavedHits.length}
     } else if(rollResults.p2Unblocked.length > 0) {
       for(let i = 0; i < rollResults.p2Unblocked.length + rollResults.p2Crits.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       unsavedHits = savingRolls.filter((r)=> {return r <= player2.weapon.dam - player1.arm})
-      unsavedDamage = {player: player1.name, damage: unsavedHits.length}
+      unsavedDamage = {player: "active", damage: unsavedHits.length}
     } else {
       return "error"
     }
@@ -123,7 +123,35 @@ const Calculator = ({player1, player2}) => {
 
   const averagesCalculation = (player1, player2) => {
     let hugeArray = calcFunction(player1, player2)
-    setResults(hugeArray)
+    // console.log('---------------------------------------------------')
+    // console.log('---------------------------------------------------')
+    // console.log('---------------------------------------------------')
+    console.log(hugeArray[0])
+    // setResults(hugeArray)
+    
+    // Find average active successes
+    let activeUnblocked = hugeArray.filter((r)=>r.rollResults.p1Unblocked.length > 0)
+    let averageActiveSuccess = ((activeUnblocked.length/hugeArray.length) * 100).toFixed(2)
+    // Find average reactive successes
+    let reactiveUnblocked = hugeArray.filter((r)=>r.rollResults.p2Unblocked.length > 0)
+    let averageReactiveSuccess = ((reactiveUnblocked.length/hugeArray.length) * 100).toFixed(2)
+    // Find average active damage dealt
+    let activeDamage = activeUnblocked.filter((r)=>r.damageResults.unsavedDamage.damage > 0)
+    let averageActiveDamageArray = activeDamage.map((r)=>r.damageResults.unsavedDamage.damage)
+    let averageActiveDamage = (averageActiveDamageArray.reduce((a, b)=>a+b, 0)/averageActiveDamageArray.length).toFixed(2)
+    let averageChanceActiveDamage = ((activeDamage.length/hugeArray.length) * 100).toFixed(2)
+    // Find average reactive damage dealt
+    let reactiveDamage = reactiveUnblocked.filter((r)=>r.damageResults.unsavedDamage.damage > 0)
+    let averageReactiveDamageArray = reactiveDamage.map((r)=>r.damageResults.unsavedDamage.damage)
+    let averageReactiveDamage = (averageReactiveDamageArray.reduce((a, b)=>a+b, 0)/averageReactiveDamageArray.length).toFixed(2)
+    let averageChanceReactiveDamage = ((reactiveDamage.length/hugeArray.length) * 100).toFixed(2)
+
+
+    // console.log(activeUnblocked.length)
+    // console.log(hugeArray.length)
+    // console.log(averageActiveSuccess)
+
+    setResults({aASuccess:averageActiveSuccess, rASuccess:averageReactiveSuccess, aCADamage: averageChanceActiveDamage, aADamage:averageActiveDamage, aRDamage: averageReactiveDamage, aCRDamage:averageChanceReactiveDamage})
   }
 
 
@@ -135,7 +163,7 @@ const Calculator = ({player1, player2}) => {
     let min = Math.ceil(1)
     
     
-    for(let i=0; i<1; i++){
+    for(let i=0; i<5000; i++){
       let profile1Rolls = []
       let profile2Rolls = []
 
@@ -168,6 +196,7 @@ const Calculator = ({player1, player2}) => {
       allResults.push({profile1Rolls, profile2Rolls, rollResults, damageResults})
     }
 
+    
     return allResults
   }
 
@@ -186,13 +215,21 @@ const Calculator = ({player1, player2}) => {
       <Text>Saving Roll: {results.damageResults ? JSON.stringify(results.damageResults.savingRolls) : "[]"}</Text>
       <Text>Failed Saves: {results.damageResults ? JSON.stringify(results.damageResults.unsavedHits) : "[]"}</Text>
       <Text>{JSON.stringify(results.damageResults)}</Text> */}
-      <Text> ------------------- </Text>
       <Text></Text>
       {loading ? <Text>Loading</Text> :
       <View>
+        <Text>Face to Face Roll Results</Text>
         <Text>ran {counter} times</Text>
-        <Text>Array Length: {JSON.stringify(results.length)}</Text>
-        <Text>Raw Data: {JSON.stringify(results)}</Text>
+        <Text> ------------------- </Text>
+        <Text>Active Win: {results.aASuccess}%</Text>
+        <Text>Active Chance of damage: {results.aCADamage}%</Text>
+        <Text>Average Damage when dealt: {results.aADamage}</Text>
+        <Text></Text>
+        <Text>Reactive Win: {results.rASuccess}%</Text>
+        <Text>Reactive Chance of damage: {results.aCRDamage}%</Text>
+        <Text>Average Damage when dealt: {results.aRDamage}</Text>
+        {/* <Text>Array Length: {JSON.stringify(results.length)}</Text> */}
+        {/* <Text>Raw Data: {JSON.stringify(results)}</Text> */}
       </View>
       }
     </View>
