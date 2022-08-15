@@ -12,9 +12,9 @@ const Shoot = () => {
 
   return (
     <View>
-      <Profiles active={active} reactive={reactive} setActive={setActive} setReactive={setReactive}/>
-      <Modifiers player1={player1} player2={player2} setPlayer1={setPlayer1} setPlayer2={setPlayer2}/>
-      <Calculator player1 = {active} player2 = {reactive}/>
+      <Profiles style={{zIndex:2}} active={active} reactive={reactive} setActive={setActive} setReactive={setReactive}/>
+      <Modifiers style={{zIndex:1}} player1={player1} player2={player2} setPlayer1={setPlayer1} setPlayer2={setPlayer2}/>
+      <Calculator style={{zIndex:0}} player1 = {active} player2 = {reactive}/>
     </View>
   )
 }

@@ -42,16 +42,10 @@ const Profiles = ({active, reactive, setActive, setReactive}) => {
           value: 'id'
         }}
         onChangeValue={(value) => {searchById(value, 'a')}}
+        zIndex={30}
       />
       <Text>BS{active.bs} ARM{active.arm}</Text>
       <Text>Weapon: {active.weapon.name} Burst: {active.weapon.burst} Damage: {active.weapon.dam}</Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
       <Text>Reactive:</Text>
       <DropDownPicker
         open={openReactive}
@@ -66,19 +60,10 @@ const Profiles = ({active, reactive, setActive, setReactive}) => {
           value: 'id'
         }}
         onChangeValue={(value) => {searchById(value, 'r')}}
+        zIndex={20}
       />
       <Text>BS{reactive.bs} ARM{reactive.arm} </Text>
       <Text>Weapon: {reactive.weapon.name} Burst: {reactive.weapon.burst} Damage: {reactive.weapon.dam}</Text>
-     
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
     </View>
   )
 }
