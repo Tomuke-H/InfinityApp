@@ -8,19 +8,27 @@ const Profiles = ({active, reactive, setActive, setReactive}) => {
   const [openActive, setOpenActive] = useState(false)
   const [activeId, setActiveId] = useState(null)
   const [openReactive, setOpenReactive] = useState(false)
+  const [reactiveId, setReactiveId] = useState(null)
 
   useEffect(()=>{
     console.log(active)
   }, [active])
 
-  const searchById = (id) => {
+  const searchById = (id, w) => {
     let searched = profileList.filter((p)=>p.id === id)
-    setActive(searched[0])
+    if(w==='a'){
+      setActive(searched[0])
+    } else if(w==='r'){
+      setReactive(searched[0])
+    } else {
+      console.log("search error")
+    }
   }
   
   return (
     <View>
      
+      <Text>Active: </Text>
       <DropDownPicker
         open={openActive}
         value={activeId}
@@ -33,27 +41,41 @@ const Profiles = ({active, reactive, setActive, setReactive}) => {
           label: 'name',
           value: 'id'
         }}
-        onChangeValue={(value) => {searchById(value)}}
+        onChangeValue={(value) => {searchById(value, 'a')}}
       />
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text></Text>
-      <Text>Active: </Text>
-      <Text>{active.name} BS{active.bs} ARM{active.arm}</Text>
+      <Text>BS{active.bs} ARM{active.arm}</Text>
       <Text>Weapon: {active.weapon.name} Burst: {active.weapon.burst} Damage: {active.weapon.dam}</Text>
       <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
       <Text>Reactive:</Text>
-      <Text>{reactive.name} BS{reactive.bs} ARM{reactive.arm} </Text>
+      <DropDownPicker
+        open={openReactive}
+        value={reactiveId}
+        items={profiles}
+        setOpen={setOpenReactive}
+        setValue={setReactiveId}
+        setItems={setProfiles}
+        containerStyle={{maxWidth:'70%'}}
+        schema={{
+          label: 'name',
+          value: 'id'
+        }}
+        onChangeValue={(value) => {searchById(value, 'r')}}
+      />
+      <Text>BS{reactive.bs} ARM{reactive.arm} </Text>
       <Text>Weapon: {reactive.weapon.name} Burst: {reactive.weapon.burst} Damage: {reactive.weapon.dam}</Text>
+     
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
       <Text></Text>
     </View>
   )

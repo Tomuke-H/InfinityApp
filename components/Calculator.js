@@ -173,7 +173,7 @@ const Calculator = ({player1, player2}) => {
         profile1Rolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       
-      for(let k = 0; k < player2.weapon.burst; k++){
+      for(let k = 0; k < 1; k++){
         profile2Rolls.push(Math.floor(Math.random() * (max - min) + min));
       }
       
@@ -206,15 +206,7 @@ const Calculator = ({player1, player2}) => {
   return (
     <View style={styles.container}>
       <Button onPress={()=> averagesCalculation(player1, player2)} title="Run"/>
-      {/* <Text>{player1.name}'s Roll:{JSON.stringify(results.profile1Rolls)}</Text>
-      <Text>{player2.name}'s Roll:{JSON.stringify(results.profile2Rolls)}</Text>
-      <Text></Text>
-      <Text>{player1.name}'s Successes:{results.rollResults.p1Unblocked ? JSON.stringify(results.rollResults.p1Unblocked) : "[]"}</Text>
-      <Text>{player2.name}'s Successes:{results.rollResults.p2Unblocked ? JSON.stringify(results.rollResults.p2Unblocked) : "[]"}</Text>
-      <Text></Text>
-      <Text>Saving Roll: {results.damageResults ? JSON.stringify(results.damageResults.savingRolls) : "[]"}</Text>
-      <Text>Failed Saves: {results.damageResults ? JSON.stringify(results.damageResults.unsavedHits) : "[]"}</Text>
-      <Text>{JSON.stringify(results.damageResults)}</Text> */}
+      
       <Text></Text>
       {loading ? <Text>Loading</Text> :
       <View>
