@@ -50,6 +50,8 @@ const Profiles = ({active, reactive, setActive, setReactive}) => {
       <Text></Text>
       <Text></Text>
       <Text></Text>
+      <Text></Text>
+      <Text></Text>
       <Text>Reactive:</Text>
       <DropDownPicker
         open={openReactive}

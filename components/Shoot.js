@@ -12,9 +12,6 @@ const Shoot = () => {
 
   return (
     <View>
-      <Text>
-        Shoot!!
-      </Text>
       <Profiles active={active} reactive={reactive} setActive={setActive} setReactive={setReactive}/>
       <Modifiers player1={player1} player2={player2} setPlayer1={setPlayer1} setPlayer2={setPlayer2}/>
       <Calculator player1 = {active} player2 = {reactive}/>
