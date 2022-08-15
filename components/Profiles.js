@@ -1,38 +1,54 @@
-import React,{ useState } from 'react'
+import React,{ useState, useEffect } from 'react'
 import { StyleSheet, View, Text, Button } from 'react-native'
 import { profileList } from './profileList'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 const Profiles = ({active, reactive, setActive, setReactive}) => {
-  const [profiles, setProfiles] = useState([{label: 'Apple', value: 'apple'}, {label: 'Orange', value: 'orange'}])
+  const [profiles, setProfiles] = useState(profileList)
   const [openActive, setOpenActive] = useState(false)
-  const [activeValue, setActiveValue] = useState(null)
+  const [activeId, setActiveId] = useState(null)
   const [openReactive, setOpenReactive] = useState(false)
 
-  // const refineData = () => {
-  //   let refinedList = profileList.map((p)=> ({label: p.name, value: p.name}))
-  //   setProfiles(refinedList)
-  //   console.log(profileList)
-  //   console.log(profiles)
-  // }
+  useEffect(()=>{
+    console.log(active)
+  }, [active])
 
-  // refineData()
+  const searchById = (id) => {
+    let searched = profileList.filter((p)=>p.id === id)
+    setActive(searched[0])
+  }
   
   return (
     <View>
-      {/* <Button title="Refine" onPress={()=>refineData()} /> */}
      
       <DropDownPicker
         open={openActive}
-        value={activeValue}
+        value={activeId}
         items={profiles}
         setOpen={setOpenActive}
-        setValue={setActiveValue}
+        setValue={setActiveId}
         setItems={setProfiles}
         containerStyle={{maxWidth:'70%'}}
+        schema={{
+          label: 'name',
+          value: 'id'
+        }}
+        onChangeValue={(value) => {searchById(value)}}
       />
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
+      <Text></Text>
       <Text>Active: </Text>
-      <Text>{active.label} BS{active.bs} ARM{active.arm}</Text>
+      <Text>{active.name} BS{active.bs} ARM{active.arm}</Text>
       <Text>Weapon: {active.weapon.name} Burst: {active.weapon.burst} Damage: {active.weapon.dam}</Text>
       <Text></Text>
       <Text>Reactive:</Text>
