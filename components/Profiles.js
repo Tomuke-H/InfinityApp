@@ -64,6 +64,7 @@ const Profiles = ({active, reactive, setActive, setReactive}) => {
       />
       <Text>BS{reactive.bs} ARM{reactive.arm} </Text>
       <Text>Weapon: {reactive.weapon.name} Burst: {reactive.weapon.burst} Damage: {reactive.weapon.dam}</Text>
+      <Modifiers active={active} reactive={reactive} setActive={setActive} setReactive={setReactive}/>
     </View>
   )
 }

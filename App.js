@@ -1,9 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
-// import useCalculator from './hooks/useCalculator.js'
-import Calculator from './components/Calculator.js';
 import Shoot from './components/Shoot.js';
-import React, {useState} from 'react'
+import React from 'react'
 
 export default function App() {
 
