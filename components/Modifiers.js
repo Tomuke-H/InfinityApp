@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import { Text, View, Switch } from 'react-native'
+import MultiSlider from '@ptomasroos/react-native-multi-slider'
+
 
 const Modifiers = ({active, reactive, mods, setMods}) => {
   const [activeCover, setActiveCover] = useState(false)
@@ -8,6 +10,7 @@ const Modifiers = ({active, reactive, mods, setMods}) => {
   const [activeArm, setActiveArm] = useState(0)
   const [reactiveBs, setReactiveBs] = useState(0)
   const [reactiveArm, setReactiveArm] = useState(0)
+  const [range, setRange] = useState(0)
 
   const updateMods = () => {
     setMods({activeBsMod: mods.activeBsMod+activeBs, activeArmMod:mods.activeArmMod+activeArm, reactiveBsMod:mods.reactiveBsMod+reactiveBs, reactiveArmMod:mods.reactiveArmMod+reactiveArm})
@@ -41,6 +44,15 @@ const Modifiers = ({active, reactive, mods, setMods}) => {
     // updateMods()
   }
   
+  const renderRange = () => {
+    if(range > 48){
+      return 48+'+'
+    } else if(range > 0) {
+      return range-8+'-'+range
+    } else {
+      return range
+    }
+  }
 
   return (
     <View>
@@ -56,6 +68,15 @@ const Modifiers = ({active, reactive, mods, setMods}) => {
         value={reactiveCover}
         onValueChange={toggleReactiveCover}
       />
+      <Text>Range</Text>
+      <MultiSlider
+        allowOverlap={true}
+        // step={8}
+        value={range}
+        onValuesChange={(value)=>setRange(value)}
+        optionsArray={[0,8,16,24,32,40,48,96]}
+      />
+      <Text>{renderRange()}</Text>
     </View>
   )
 }
