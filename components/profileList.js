@@ -5,3 +5,9 @@ export const profileList = [
   {id:4, name: "Knight of Justice", bs: 14, weapon: {name:"Spitfire", burst: 4, dam: 14}, arm: 5, faction:"PanO"},
   {id:5, name: "Keisotsu", bs: 10, weapon: {name: "Combi Rifle", burst: 3, dam: 13}, arm: 1, faction: "JSA"}
 ]
+
+export const weaponList = [
+  {id:1, name: "Combi Rifle", burst: 3, dam: 13, 8:3, 16:3, 24:-3, 32:-3, 40:-6, 48:-6, 96:null},
+  {id:2, name: "Spitfire", burst: 4, dam: 14},
+  {id:3, name: "Rifle", burst: 3, dam: 13}
+]
