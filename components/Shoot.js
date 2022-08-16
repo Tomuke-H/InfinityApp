@@ -23,8 +23,8 @@ const Shoot = () => {
       <Calculator 
         player1={active} 
         player2={reactive} 
-        activeMods={activeMods} 
-        reactiveMods={reactiveMods}/>
+        mods={mods} 
+      />
     </View>
   )
 }

@@ -7,11 +7,19 @@ const Modifiers = ({active, reactive, mods, setMods}) => {
 
   const toggleActiveCover = () => {
     if(activeCover){
-      setMods({activeBsMod: mods.activeBsMod, activeArmMod: mods.activeArmsMod -3, reactiveBsMod: mods.reactiveBsMod +3, reactiveArmMod:mods.reactiveArmMod})
+      setMods({activeBsMod: mods.activeBsMod, activeArmMod: mods.activeArmMod -3, reactiveBsMod: mods.reactiveBsMod +3, reactiveArmMod:mods.reactiveArmMod})
     } else if(!activeCover){
-      setMods({activeBsMod: mods.activeBsMod, activeArmMod: mods.activeArmsMod +3, reactiveBsMod: mods.reactiveBsMod -3, reactiveArmMod:mods.reactiveArmMod})
+      setMods({activeBsMod: mods.activeBsMod, activeArmMod: mods.activeArmMod +3, reactiveBsMod: mods.reactiveBsMod -3, reactiveArmMod:mods.reactiveArmMod})
     }
     setActiveCover(!activeCover)
+  }
+  const toggleReactiveCover = () => {
+    if(reactiveCover){
+      setMods({activeBsMod: mods.activeBsMod+3, activeArmMod: mods.activeArmMod, reactiveBsMod: mods.reactiveBsMod, reactiveArmMod:mods.reactiveArmMod-3})
+    } else if(!reactiveCover){
+      setMods({activeBsMod: mods.activeBsMod-3, activeArmMod: mods.activeArmMod, reactiveBsMod: mods.reactiveBsMod, reactiveArmMod:mods.reactiveArmMod+3})
+    }
+    setReactiveCover(!reactiveCover)
   }
   
 
@@ -21,6 +29,11 @@ const Modifiers = ({active, reactive, mods, setMods}) => {
       <Switch 
         value={activeCover}
         onValueChange={toggleActiveCover}
+      />
+      <Text>Reactive in Cover</Text>
+      <Switch 
+        value={reactiveCover}
+        onValueChange={toggleReactiveCover}
       />
     </View>
   )

@@ -45,7 +45,7 @@ const Profiles = ({active, reactive, setActive, setReactive, mods, setMods}) => 
         onChangeValue={(value) => {searchById(value, 'a')}}
         zIndex={30}
       />
-      <Text>BS{active.bs} ARM{active.arm}</Text>
+      <Text>BS{active.bs}{mods.activeBsMod !== 0? `(${mods.activeBsMod})` : ''} ARM{active.arm}{mods.activeArmMod !== 0? `(+${mods.activeArmMod})` : ''}</Text>
       <Text>Weapon: {active.weapon.name} Burst: {active.weapon.burst} Damage: {active.weapon.dam}</Text>
       <Text>Reactive:</Text>
       <DropDownPicker
@@ -63,7 +63,7 @@ const Profiles = ({active, reactive, setActive, setReactive, mods, setMods}) => 
         onChangeValue={(value) => {searchById(value, 'r')}}
         zIndex={20}
       />
-      <Text>BS{reactive.bs} ARM{reactive.arm} </Text>
+      <Text>BS{reactive.bs}{mods.reactiveBsMod !== 0? `(${mods.reactiveBsMod})` : ''} ARM{reactive.arm}{mods.reactiveArmMod !== 0? `(+${mods.reactiveArmMod})` : ''} </Text>
       <Text>Weapon: {reactive.weapon.name} Burst: {reactive.weapon.burst} Damage: {reactive.weapon.dam}</Text>
       <Modifiers active={active} reactive={reactive} mods={mods} setMods={setMods}/>
     </View>
