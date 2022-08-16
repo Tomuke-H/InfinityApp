@@ -11,9 +11,9 @@ const Profiles = ({active, reactive, setActive, setReactive, mods, setMods}) => 
   const [openReactive, setOpenReactive] = useState(false)
   const [reactiveId, setReactiveId] = useState(null)
 
-  useEffect(()=>{
-    console.log(active)
-  }, [active])
+  // useEffect(()=>{
+  //   console.log(active)
+  // }, [active])
 
   const searchById = (id, w) => {
     let searched = profileList.filter((p)=>p.id === id)

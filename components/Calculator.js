@@ -1,7 +1,7 @@
 import React, {useState } from 'react';
 import { StyleSheet, Text, Button, View } from 'react-native';
 
-const Calculator = ({player1, player2}) => {
+const Calculator = ({player1, player2, mods}) => {
   const [results, setResults] = useState({aASuccess:0, rASuccess:0, aCADamage:0, aADamage:0, aCRDamage:0, aRDamage:0})
   const [counter, setCounter] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -9,8 +9,12 @@ const Calculator = ({player1, player2}) => {
 
   // The Big Comparison
   const compareRolls = (player1, player2, p1Rolls, p2Rolls) => {
-    let p1Successes = p1Rolls.filter((r)=>{return r <= player1.bs})
-    let p2Successes = p2Rolls.filter((r)=>{return r <= player2.bs})
+    let p1ModifiedBs = player1.bs+mods.activeBsMod
+    let p2ModifiedBs = player2.bs+mods.reactiveBsMod
+    // console.log('Effective P1 Bs:'+p1ModifiedBs)
+    // console.log('Effective P2 Bs:'+p2ModifiedBs)
+    let p1Successes = p1Rolls.filter((r)=>{return r <= p1ModifiedBs})
+    let p2Successes = p2Rolls.filter((r)=>{return r <= p2ModifiedBs})
 
     let p1Crits = []
     let p2Crits = []
@@ -25,10 +29,10 @@ const Calculator = ({player1, player2}) => {
 
 
     // Seperate Crits
-    p1Crits = p1Successes.filter((r)=>{return r === player1.bs})
-    p2Crits = p2Successes.filter((r)=>{return r === player2.bs})
-    let p1Hits = p1Successes.filter((r)=>{return r !== player1.bs})
-    let p2Hits = p2Successes.filter((r)=>{return r !== player2.bs})
+    p1Crits = p1Successes.filter((r)=>{return r === p1ModifiedBs})
+    p2Crits = p2Successes.filter((r)=>{return r === p2ModifiedBs})
+    let p1Hits = p1Successes.filter((r)=>{return r !== p1ModifiedBs})
+    let p2Hits = p2Successes.filter((r)=>{return r !== p2ModifiedBs})
 
 
     // Crit cancel
@@ -89,6 +93,10 @@ const Calculator = ({player1, player2}) => {
 
   // Damage calculating function
   const damageFunction = (player1, player2, rollResults) => {
+    let p1ModifiedArm = player1.arm+mods.activeArmMod
+    let p2ModifiedArm = player2.arm+mods.reactiveArmMod
+    // console.log('Effective P1 Arm:'+p1ModifiedArm)
+    // console.log('Effective P2 Arm:'+p2ModifiedArm)
     if(!rollResults.p1Unlocked && !rollResults.p2Unblocked){
       return 'backup error'
     }
@@ -104,13 +112,13 @@ const Calculator = ({player1, player2}) => {
       for(let i = 0; i < rollResults.p1Unblocked.length + rollResults.p1Crits.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
-      unsavedHits = savingRolls.filter((r)=> {return r <= player1.weapon.dam - player2.arm})
+      unsavedHits = savingRolls.filter((r)=> {return r <= player1.weapon.dam - p2ModifiedArm})
       unsavedDamage = {player: "reactive", damage: unsavedHits.length}
     } else if(rollResults.p2Unblocked.length > 0) {
       for(let i = 0; i < rollResults.p2Unblocked.length + rollResults.p2Crits.length; i++){
         savingRolls.push(Math.floor(Math.random() * (max - min) + min));
       }
-      unsavedHits = savingRolls.filter((r)=> {return r <= player2.weapon.dam - player1.arm})
+      unsavedHits = savingRolls.filter((r)=> {return r <= player2.weapon.dam - p1ModifiedArm})
       unsavedDamage = {player: "active", damage: unsavedHits.length}
     } else {
       return "error"
@@ -125,8 +133,7 @@ const Calculator = ({player1, player2}) => {
     let hugeArray = calcFunction(player1, player2)
     // console.log('---------------------------------------------------')
     // console.log('---------------------------------------------------')
-    // console.log('---------------------------------------------------')
-    console.log(hugeArray[0])
+    // console.log(hugeArray[0])
     // setResults(hugeArray)
     
     // Find average active successes
@@ -158,6 +165,8 @@ const Calculator = ({player1, player2}) => {
 
   // Master function
   const calcFunction = (player1, player2) => {
+    // console.log('---------------------------------------------------')
+
     let allResults = []
     let max = Math.floor(21)
     let min = Math.ceil(1)

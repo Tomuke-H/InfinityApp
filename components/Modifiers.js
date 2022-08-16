@@ -44,6 +44,8 @@ const Modifiers = ({active, reactive, mods, setMods}) => {
 
   return (
     <View>
+      <Text>-----------------</Text>
+      <Text>Modifiers:</Text>
       <Text>Active in Cover</Text>
       <Switch 
         value={activeCover}
